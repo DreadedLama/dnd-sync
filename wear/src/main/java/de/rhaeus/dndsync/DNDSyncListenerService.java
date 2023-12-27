@@ -7,24 +7,26 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import com.google.android.gms.wearable.MessageEvent;
+
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.WearableListenerService;
 
 public class DNDSyncListenerService extends WearableListenerService {
     private static final String TAG = "DNDSyncListenerService";
-    private static final String DND_SYNC_MESSAGE_PATH = "/wear-dnd-sync";
 
     @Override
-    public void onMessageReceived (@NonNull MessageEvent messageEvent) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onMessageReceived: " + messageEvent);
-        }
+    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+        Log.d(TAG, "onDataChanged: " + dataEventBuffer);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (messageEvent.getPath().equalsIgnoreCase(DND_SYNC_MESSAGE_PATH)) {
-            Log.d(TAG, "received path: " + DND_SYNC_MESSAGE_PATH);
+        for (DataEvent dataEvent : dataEventBuffer) {
+
+            // No need to filter by path, it is defined in the manifest
+            // Android will make sure we only get our own messages
 
             boolean vibrate = prefs.getBoolean("vibrate_key", false);
             Log.d(TAG, "vibrate: " + vibrate);
@@ -32,7 +34,7 @@ public class DNDSyncListenerService extends WearableListenerService {
                 vibrate();
             }
 
-            byte[] data = messageEvent.getData();
+            byte[] data = dataEvent.getDataItem().getData();
             // data[0] contains dnd mode of phone
             // 0 = INTERRUPTION_FILTER_UNKNOWN
             // 1 = INTERRUPTION_FILTER_ALL (all notifications pass)
@@ -98,9 +100,6 @@ public class DNDSyncListenerService extends WearableListenerService {
                     Log.d(TAG, "attempting to set DND but access not granted");
                 }
             }
-
-        } else {
-            super.onMessageReceived(messageEvent);
         }
     }
 
