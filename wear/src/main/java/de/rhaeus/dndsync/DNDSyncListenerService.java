@@ -61,12 +61,21 @@ public class DNDSyncListenerService extends WearableListenerService {
                 boolean useBedtimeMode = prefs.getBoolean("bedtime_key", true);
                 Log.d(TAG, "useBedtimeMode: " + useBedtimeMode);
                 if (useBedtimeMode) {
+//                    String deviceName = android.os.Build.MODEL; // returns model name
+                    String deviceManufacturer = android.os.Build.MANUFACTURER; // returns manufacturer
                     int bedTimeModeValue = (dndStatePhone ==5)?1:0;
+                    boolean samsungBedtimeModeSuccess = false;
+                    if(deviceManufacturer.equalsIgnoreCase("Samsung")) {
+                        samsungBedtimeModeSuccess = Settings.Global.putInt(
+                                getApplicationContext().getContentResolver(), "setting_bedtime_mode_running_state", bedTimeModeValue);
+                    }
                     boolean bedtimeModeSuccess = Settings.Global.putInt(
-                            getApplicationContext().getContentResolver(), "setting_bedtime_mode_running_state", bedTimeModeValue);
+                        getApplicationContext().getContentResolver(), "bedtime_mode", bedTimeModeValue);
                     boolean zenModeSuccess = Settings.Global.putInt(
                             getApplicationContext().getContentResolver(), "zen_mode", bedTimeModeValue);
-                    if (bedtimeModeSuccess && zenModeSuccess) {
+                    if (deviceManufacturer.equalsIgnoreCase("Samsung") && bedtimeModeSuccess && samsungBedtimeModeSuccess && zenModeSuccess) {
+                        Log.d(TAG, "Bedtime mode value toggled");
+                    } else if (!deviceManufacturer.equalsIgnoreCase("Samsung") && bedtimeModeSuccess && zenModeSuccess) {
                         Log.d(TAG, "Bedtime mode value toggled");
                     } else {
                         Log.d(TAG, "Bedtime mode toggle failed");
