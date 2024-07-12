@@ -44,10 +44,12 @@ public class DNDNotificationService extends NotificationListenerService {
             String title = sbn.getNotification().extras.getString("android.title");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean syncBedTime = prefs.getBoolean("bedtime_sync_key", true);
-            if(syncBedTime && (title.contains("on") || title.contains("paused"))) {
+            String bedTimeOn = getString(R.string.digital_wellbeing_bedtime_on);
+            String bedTimePaused = getString(R.string.digital_wellbeing_bedtime_paused);
+            if(syncBedTime && (title.contains(bedTimeOn) || title.contains(bedTimePaused))) {
                 int updatedInterruptionFilter;
                 //BedTime
-                if (title.contains("paused")) {
+                if (title.contains(bedTimePaused)) {
                     updatedInterruptionFilter = (interruptionFilter == 5) ? 6 : 5;
                 } else {
                     updatedInterruptionFilter = interruptionFilter;
