@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- BedTime strings -->
+    <string name="digital_wellbeing_bedtime_on">activé</string>
+    <string name="digital_wellbeing_bedtime_paused">suspendu</string>
+</resources>
