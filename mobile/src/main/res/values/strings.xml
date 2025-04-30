@@ -1,17 +1,18 @@
 <resources>
-    <string name="app_name">DNDSync</string>
+    <string name="app_name" translatable="false">DNDSync</string>
     <!-- Preference Titles -->
-    <string name="permission_header">Permissions</string>
-    <string name="sync_header">Sync</string>
+    <string name="permission_header" translatable="false">Permissions</string>
+    <string name="sync_header" translatable="false">Sync</string>
 
     <!-- Permission Preferences -->
-    <string name="dnd_permission_title">DND Permission</string>
-    <string name="dnd_permission_allowed">DND access granted</string>
-    <string name="dnd_permission_not_allowed">DND access denied</string>
+    <string name="dnd_permission_title" translatable="false">DND Permission</string>
+    <string name="dnd_permission_allowed" translatable="false">DND access granted</string>
+    <string name="dnd_permission_not_allowed" translatable="false">DND access denied</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync DND state to watch</string>
-    <string name="sync_bedtime_title">Sync Bedtime mode to watch</string>
+    <string name="sync_title" translatable="false">Sync DND state to watch</string>
+    <string name="sync_bedtime_title" translatable="false">Sync Bedtime mode to watch</string>
+    <string name="silent_as_dnd_title" translatable="false">Nothing Phone Flip to Glyph as DND</string>
 
     <!-- BedTime strings -->
     <string name="digital_wellbeing_bedtime_on">on</string>

@@ -1,7 +1,9 @@
 package de.rhaeus.dndsync;
 
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -68,6 +70,13 @@ public class DNDSyncListenerService extends WearableListenerService {
                     if(deviceManufacturer.equalsIgnoreCase("Samsung")) {
                         samsungBedtimeModeSuccess = Settings.Global.putInt(
                                 getApplicationContext().getContentResolver(), "setting_bedtime_mode_running_state", bedTimeModeValue);
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(
+                                "com.google.android.apps.wearable.settings",
+                                "com.samsung.android.clockwork.settings.advanced.bedtimemode.StBedtimeModeReservedActivity"
+                        ));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     }
                     boolean bedtimeModeSuccess = Settings.Global.putInt(
                         getApplicationContext().getContentResolver(), "bedtime_mode", bedTimeModeValue);
