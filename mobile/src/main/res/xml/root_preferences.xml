@@ -13,15 +13,6 @@
                 app:defaultValue="true"
                 app:title="@string/sync_title" />
 
-        <!-- Wrapped, indented-looking Sub-option -->
-        <SwitchPreferenceCompat
-                app:key="silent_as_dnd_key"
-                app:iconSpaceReserved="false"
-                app:defaultValue="false"
-                app:dependency="dnd_sync_key"
-                app:title="@string/silent_as_dnd_title"
-                app:widgetLayout="@layout/preference_multiline_switch"/>
-
     </PreferenceCategory>
 
     <!-- Second Group: Bedtime -->

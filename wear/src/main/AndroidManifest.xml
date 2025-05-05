@@ -10,6 +10,9 @@
             tools:ignore="ProtectedPermissions" />
 
     <uses-feature android:name="android.hardware.type.watch" />
+    <queries>
+        <package android:name="com.google.android.apps.wearable.settings" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -20,7 +23,7 @@
         >
         <activity
             android:name="in.dreadedlama.dndsync.MainActivity"
-            android:exported="true">
+            android:exported="true" android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
