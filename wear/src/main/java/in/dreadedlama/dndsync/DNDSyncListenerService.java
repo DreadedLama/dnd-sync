@@ -1,7 +1,9 @@
-package de.rhaeus.dndsync;
+package in.dreadedlama.dndsync;
 
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -17,6 +19,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 public class DNDSyncListenerService extends WearableListenerService {
     private static final String TAG = "DNDSyncListenerService";
+    public static final String SAMSUNG = "Samsung";
 
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
@@ -34,17 +37,7 @@ public class DNDSyncListenerService extends WearableListenerService {
                 vibrate();
             }
 
-            byte[] data = dataEvent.getDataItem().getData();
-            // data[0] contains dnd mode of phone
-            // 0 = INTERRUPTION_FILTER_UNKNOWN
-            // 1 = INTERRUPTION_FILTER_ALL (all notifications pass)
-            // 2 = INTERRUPTION_FILTER_PRIORITY
-            // 3 = INTERRUPTION_FILTER_NONE (no notification passes)
-            // 4 = INTERRUPTION_FILTER_ALARMS
-            // Custom
-            // 5 = BedTime Mode On
-            // 6 = BedTime Mode Off
-            byte dndStatePhone = data[0];
+            byte dndStatePhone = getPhoneDndState(dataEvent);
             Log.d(TAG, "dndStatePhone: " + dndStatePhone);
 
             // get dnd state
@@ -64,22 +57,6 @@ public class DNDSyncListenerService extends WearableListenerService {
 //                    String deviceName = android.os.Build.MODEL; // returns model name
                     String deviceManufacturer = android.os.Build.MANUFACTURER; // returns manufacturer
                     int bedTimeModeValue = (dndStatePhone ==5)?1:0;
-                    boolean samsungBedtimeModeSuccess = false;
-                    if(deviceManufacturer.equalsIgnoreCase("Samsung")) {
-                        samsungBedtimeModeSuccess = Settings.Global.putInt(
-                                getApplicationContext().getContentResolver(), "setting_bedtime_mode_running_state", bedTimeModeValue);
-                    }
-                    boolean bedtimeModeSuccess = Settings.Global.putInt(
-                        getApplicationContext().getContentResolver(), "bedtime_mode", bedTimeModeValue);
-                    boolean zenModeSuccess = Settings.Global.putInt(
-                            getApplicationContext().getContentResolver(), "zen_mode", bedTimeModeValue);
-                    if (deviceManufacturer.equalsIgnoreCase("Samsung") && bedtimeModeSuccess && samsungBedtimeModeSuccess && zenModeSuccess) {
-                        Log.d(TAG, "Bedtime mode value toggled");
-                    } else if (!deviceManufacturer.equalsIgnoreCase("Samsung") && bedtimeModeSuccess && zenModeSuccess) {
-                        Log.d(TAG, "Bedtime mode value toggled");
-                    } else {
-                        Log.d(TAG, "Bedtime mode toggle failed");
-                    }
                     boolean usePowerSaverMode = prefs.getBoolean("power_saver_key", true);
                     if(usePowerSaverMode) {
                         boolean lowPower = Settings.Global.putInt(
@@ -96,6 +73,34 @@ public class DNDSyncListenerService extends WearableListenerService {
                             Log.d(TAG, "Power Saver mode toggle failed");
                         }
                     }
+
+                    boolean samsungBedtimeModeSuccess = false;
+                    if(deviceManufacturer.equalsIgnoreCase(SAMSUNG)) {
+                        samsungBedtimeModeSuccess = Settings.Global.putInt(
+                                getApplicationContext().getContentResolver(), "setting_bedtime_mode_running_state", bedTimeModeValue);
+                    }
+                    boolean bedtimeModeSuccess = Settings.Global.putInt(
+                        getApplicationContext().getContentResolver(), "bedtime_mode", bedTimeModeValue);
+                    boolean zenModeSuccess = Settings.Global.putInt(
+                            getApplicationContext().getContentResolver(), "zen_mode", bedTimeModeValue);
+                    if (deviceManufacturer.equalsIgnoreCase(SAMSUNG) && bedtimeModeSuccess && samsungBedtimeModeSuccess && zenModeSuccess) {
+                        new android.os.Handler(getMainLooper()).postDelayed(() -> {
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName(
+                                    "com.google.android.apps.wearable.settings",
+                                    "com.samsung.android.clockwork.settings.advanced.bedtimemode.StBedtimeModeReservedActivity"
+                            ));
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            Log.d(TAG, "Bedtime mode activity started after 4-second delay");
+                        }, 35   00); // delay in milliseconds
+                        Log.d(TAG, "Bedtime mode value toggled");
+                    } else if (!deviceManufacturer.equalsIgnoreCase(SAMSUNG) && bedtimeModeSuccess && zenModeSuccess) {
+                        Log.d(TAG, "Bedtime mode value toggled");
+                    } else {
+                        Log.d(TAG, "Bedtime mode toggle failed");
+                    }
+
                 }
             }
 
@@ -112,9 +117,23 @@ public class DNDSyncListenerService extends WearableListenerService {
         }
     }
 
+    private static byte getPhoneDndState(DataEvent dataEvent) {
+        byte[] data = dataEvent.getDataItem().getData();
+        // data[0] contains dnd mode of phone
+        // 0 = INTERRUPTION_FILTER_UNKNOWN
+        // 1 = INTERRUPTION_FILTER_ALL (all notifications pass)
+        // 2 = INTERRUPTION_FILTER_PRIORITY
+        // 3 = INTERRUPTION_FILTER_NONE (no notification passes)
+        // 4 = INTERRUPTION_FILTER_ALARMS
+        // Custom
+        // 5 = BedTime Mode On
+        // 6 = BedTime Mode Off
+        return data[0];
+    }
+
     private void vibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+        v.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
 }

@@ -1,31 +1,51 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:iconSpaceReserved="false">
+                  app:iconSpaceReserved="false">
 
-    <PreferenceCategory app:title="@string/sync_header"
-        app:iconSpaceReserved="false">
+    <!-- First Group: DND Sync + Treat Silent as DND -->
+    <PreferenceCategory
+            app:title="DND Sync Settings"
+            app:iconSpaceReserved="false">
 
+        <!-- Parent Switch -->
         <SwitchPreferenceCompat
-            app:key="dnd_sync_key"
-            app:iconSpaceReserved="false"
-            app:defaultValue="true"
-            app:title="@string/sync_title" />
+                app:key="dnd_sync_key"
+                app:iconSpaceReserved="false"
+                app:defaultValue="true"
+                app:title="@string/sync_title" />
+
+        <!-- Wrapped, indented-looking Sub-option -->
+        <SwitchPreferenceCompat
+                app:key="silent_as_dnd_key"
+                app:iconSpaceReserved="false"
+                app:defaultValue="false"
+                app:dependency="dnd_sync_key"
+                app:title="@string/silent_as_dnd_title"
+                app:widgetLayout="@layout/preference_multiline_switch"/>
+
+    </PreferenceCategory>
+
+    <!-- Second Group: Bedtime -->
+    <PreferenceCategory
+            app:title="Bedtime Sync Settings"
+            app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
                 app:key="bedtime_sync_key"
                 app:iconSpaceReserved="false"
                 app:defaultValue="true"
                 app:title="@string/sync_bedtime_title" />
-
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/permission_header"
-        app:iconSpaceReserved="false">
+    <!-- Permissions -->
+    <PreferenceCategory
+            app:title="@string/permission_header"
+            app:iconSpaceReserved="false">
 
-        <Preference app:key="dnd_permission_key"
-            app:iconSpaceReserved="false"
-            app:title="@string/dnd_permission_title"
-            app:summary="@string/dnd_permission_not_allowed" />
-
+        <Preference
+                app:key="dnd_permission_key"
+                app:iconSpaceReserved="false"
+                app:title="@string/dnd_permission_title"
+                app:summary="@string/dnd_permission_not_allowed" />
     </PreferenceCategory>
 
 </PreferenceScreen>

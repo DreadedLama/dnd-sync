@@ -1,4 +1,4 @@
-package de.rhaeus.dndsync;
+package in.dreadedlama.dndsync;
 
 import android.os.Bundle;
 

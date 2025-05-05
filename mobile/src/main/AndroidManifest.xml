@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.rhaeus.dndsync">
 
+    <!-- Permissions -->
+    <!-- Required for DND control -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -40,6 +44,16 @@
                     android:scheme="wear" />
             </intent-filter>
         </service>
+        <!-- Receiver for Ringer Mode Changes -->
+        <receiver
+                android:name=".RingerModeReceiver"
+                android:enabled="true"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

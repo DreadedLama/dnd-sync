@@ -1,4 +1,4 @@
-package de.rhaeus.dndsync;
+package in.dreadedlama.dndsync;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("de.rhaeus.dndsync", appContext.getPackageName());
+        assertEquals("in.dreadedlama.dndsync", appContext.getPackageName());
     }
 }

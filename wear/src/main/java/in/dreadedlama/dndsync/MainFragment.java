@@ -1,4 +1,4 @@
-package de.rhaeus.dndsync;
+package in.dreadedlama.dndsync;
 
 import android.Manifest;
 import android.app.NotificationManager;
@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreferenceCompat;
 
 public class MainFragment extends PreferenceFragmentCompat {
     private Preference dndPref;
