@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.rhaeus.dndsync">
+    package="in.dreadedlama.dndsync">
 
     <!-- Permissions -->
     <!-- Required for DND control -->
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DNDSync">
         <activity
-            android:name=".MainActivity"
+            android:name="in.dreadedlama.dndsync.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".DNDNotificationService"
+            android:name="in.dreadedlama.dndsync.DNDNotificationService"
             android:exported="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -32,7 +32,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".DNDSyncListenerService"
+            android:name="in.dreadedlama.dndsync.DNDSyncListenerService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -46,7 +46,7 @@
         </service>
         <!-- Receiver for Ringer Mode Changes -->
         <receiver
-                android:name=".RingerModeReceiver"
+                android:name="in.dreadedlama.dndsync.RingerModeListenerService"
                 android:enabled="true"
                 android:exported="false">
             <intent-filter>

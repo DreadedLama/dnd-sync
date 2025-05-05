@@ -51,13 +51,13 @@ Note: This is only tested on my Galaxy Watch 4 and it might not work on other de
   * connect to the watch with `adb connect 192.168.0.100:5555` (_**insert your value!**_)
 * install the app `adb install dndsync_wear.apk`
 * grant permission for DND access  
-`adb shell cmd notification allow_listener de.rhaeus.dndsync/de.rhaeus.dndsync.DNDNotificationService`  
+`adb shell cmd notification allow_listener in.dreadedlama.dndsync/in.dreadedlama.dndsync.DNDNotificationService`  
 This allows the app to listen to DND changes and changing the DND setting
 * scroll to the permission section and check if DND permission says _access granted_ (you might need to tap on the menu entry for it to update)
 * If you want to use the Bedtime mode feature you have to grant the app access to modify secure settings.
 Grant permission for Secure Setting access
 
-  `adb shell pm grant de.rhaeus.dndsync android.permission.WRITE_SECURE_SETTINGS`
+  `adb shell pm grant in.dreadedlama.dndsync android.permission.WRITE_SECURE_SETTINGS`
 * This allows the app to change BedTime mode directly without the need for accessibility.
 You can enable this by enabling the _Bedtime Mode_ Setting in the App.
 * _**IMPORTANT: Disable ADB debugging after you are done because it drains the battery!**_

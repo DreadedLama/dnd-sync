@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace 'de.rhaeus.dndsync'
+    namespace 'in.dreadedlama.dndsync'
     compileSdk 34
 
     defaultConfig {
-        applicationId "de.rhaeus.dndsync"
-        minSdk 24
+        applicationId "in.dreadedlama.dndsync"
+        minSdk 26
         targetSdk 33
         versionCode 4
         versionName "2.3"
