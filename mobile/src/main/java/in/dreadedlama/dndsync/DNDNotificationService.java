@@ -8,24 +8,11 @@ import android.util.Log;
 import androidx.preference.PreferenceManager;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import in.dreadedlama.dndsync.shared.PhoneSignal;
 
 public class DNDNotificationService extends NotificationListenerService {
     private static final String TAG = "DNDNotificationService";
     private static final String DND_SYNC_MESSAGE_PATH = "/wear-dnd-sync";
-
-    public static boolean running = false;
-
-    @Override
-    public void onListenerConnected() {
-        Log.d(TAG, "listener connected");
-        running = true;
-    }
-
-    @Override
-    public void onListenerDisconnected() {
-        Log.d(TAG, "listener disconnected");
-        running = false;
-    }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
@@ -46,7 +33,7 @@ public class DNDNotificationService extends NotificationListenerService {
                 // 6 means bedtime OFF
                 Log.d(TAG, "bedtime mode is off");
                 int interruptionFilter = 6;
-                new Thread(() -> sendDNDSync(interruptionFilter)).start();
+                new Thread(() -> sendDNDSync(new PhoneSignal(interruptionFilter, prefs))).start();
             }
         }
     }
@@ -73,12 +60,12 @@ public class DNDNotificationService extends NotificationListenerService {
                 // 5 means bedtime ON
                 Log.d(TAG, "bedtime mode is on");
                 int interruptionFilter = 5;
-                new Thread(() -> sendDNDSync(interruptionFilter)).start();
+                new Thread(() -> sendDNDSync(new PhoneSignal(interruptionFilter,prefs))).start();
             } else if (bedTimeModeIsPaused) {
                 // 6 means bedtime OFF
                 Log.d(TAG, "bedtime mode is off");
                 int interruptionFilter = 6;
-                new Thread(() -> sendDNDSync(interruptionFilter)).start();
+                new Thread(() -> sendDNDSync(new PhoneSignal(interruptionFilter,prefs))).start();
             }
         }
     }
@@ -90,11 +77,12 @@ public class DNDNotificationService extends NotificationListenerService {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean syncDnd = prefs.getBoolean("dnd_sync_key", true);
         if(syncDnd) {
-            new Thread(() -> sendDNDSync(interruptionFilter)).start();
+            new Thread(() -> sendDNDSync(new PhoneSignal(interruptionFilter,prefs))).start();
         }
     }
 
-    private void sendDNDSync(int dndState) {
+    private void sendDNDSync(PhoneSignal phoneSignal) {
+        int dndState = phoneSignal.dndState;
         Wearable.getDataClient(this)
                 .putDataItem(PutDataRequest.create(DND_SYNC_MESSAGE_PATH)
                         .setData(new byte[]{(byte) dndState, 0})
